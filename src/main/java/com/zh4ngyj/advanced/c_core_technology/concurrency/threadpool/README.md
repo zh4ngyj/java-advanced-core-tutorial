@@ -51,6 +51,25 @@ for the purposes of maximizing advantage or minimizing risk to the users. The te
 3.  如果工作队列已满，则判断 `maximumPoolSize` 是否已满。如果未满，则创建新的非核心线程来执行任务。
 4.  如果最大线程数也已满，则执行拒绝策略 `handler`。
 
+~~~mermaid
+flowchart TB
+    A[用户] --> |任务提交| B[任务分配]
+    B --> |响应| A
+    
+    B --> |缓冲执行| C["任务缓冲：<br/>阻塞队列Task|Task|Task|Task"]
+    B --> |直接执行| D((Task))
+    B --> E[任务拒绝]
+    
+    F[任务获取] --> C
+    F --> G[线程执行任务]
+    H[线程分配] --> G
+    G --> F
+    D --> H
+    
+    H --> I["线程池<br/>corePool<br/>Thread Thread<br/>Thread Thread<br/>Thread Thread<br/>Thread Thread<br/>maximumPool"]
+    I --> J[线程回收]
+~~~
+
 ---
 
 ## 线程池状态
