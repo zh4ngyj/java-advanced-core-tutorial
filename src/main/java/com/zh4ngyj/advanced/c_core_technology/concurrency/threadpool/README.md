@@ -79,6 +79,18 @@ flowchart TB
 - **TIDYING**: 所有任务都已终止，`workerCount` 为0，线程池会进入该状态并准备调用 `terminated()` 方法。
 - **TERMINATED**: `terminated()` 方法执行完毕。
 
+生命周期
+~~~mermaid
+flowchart LR
+    A[RUNNING] --> |"shutdown()"| B[SHUTDOWN]
+    A[RUNNING] --> |"shutdownNow()"| C[STOP]
+    
+    B --> |"阻塞队列为空，线程池中工作线程数量为0"| D[TIDYING]
+    C --> |"线程池中工作线程数量为0"| D[TIDYING]
+    
+    D --> |"terminated()"| E[TERMINATED]
+~~~
+
 本包中的示例 (`ThreadPoolExecutorDemo.java`) 展示了如何手动创建线程池并观察其工作行为。
 
 ## 参考资料
