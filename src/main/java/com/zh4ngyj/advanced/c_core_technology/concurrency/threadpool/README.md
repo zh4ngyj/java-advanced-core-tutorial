@@ -1,6 +1,8 @@
 # 模块: 线程池 (ThreadPool)
 
-线程池是并发编程中的核心组件，用于管理和复用线程，以降低资源消耗、提高响应速度和增强线程的可管理性。
+线程池是并发编程中的核心组件，用于管理和复用线程，以降低资源消耗、提高响应速度和增强线程的可管理性。<p>
+Pooling is the grouping together of resources (assets, equipment, personnel, effort, etc.) 
+for the purposes of maximizing advantage or minimizing risk to the users. The term is used in finance, computing and equipment management.——wikipedia
 
 ## 为什么需要线程池？
 1.  **降低资源消耗**: 通过复用已创建的线程，减少了线程创建和销毁的开销。
