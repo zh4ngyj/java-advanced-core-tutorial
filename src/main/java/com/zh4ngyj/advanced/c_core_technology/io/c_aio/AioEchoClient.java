@@ -17,7 +17,6 @@ public class AioEchoClient {
     public static void main(String[] args) throws IOException, InterruptedException {
         String host = System.getProperty("host", "127.0.0.1");
         int port = Integer.parseInt(System.getProperty("port", "9002"));
-        CountDownLatch latch = new CountDownLatch(1);
 
         try (AsynchronousSocketChannel channel = AsynchronousSocketChannel.open()) {
             channel.connect(new InetSocketAddress(host, port)).get();
@@ -26,6 +25,7 @@ public class AioEchoClient {
 
             Scanner scanner = new Scanner(System.in);
             while (true) {
+                CountDownLatch latch = new CountDownLatch(1); // 每轮请求单独的同步器
                 String line = scanner.nextLine();
                 ByteBuffer buffer = StandardCharsets.UTF_8.encode(line + "\n");
                 channel.write(buffer, buffer, new CompletionHandler<>() {
@@ -59,8 +59,6 @@ public class AioEchoClient {
                 if ("quit".equalsIgnoreCase(line)) {
                     break;
                 }
-                // 为下一轮创建新的 latch
-                latch = new CountDownLatch(1);
             }
         } catch (Exception e) {
             throw new IOException("AIO client error", e);
