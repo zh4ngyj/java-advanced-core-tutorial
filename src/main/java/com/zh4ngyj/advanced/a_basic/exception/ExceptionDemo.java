@@ -8,7 +8,7 @@ import java.io.IOException;
  * @date: 2025/11/19 9:37
  * @des:
  */
-public class ExceptionDemo {
+public class ExceptionDemo implements AutoCloseable {
 
     public static void readFile(String path) throws IOException {
         if (path == null) {
@@ -31,5 +31,20 @@ public class ExceptionDemo {
         } finally {
             System.out.println("程序结束前必定会执行的清理逻辑");
         }
+
+        try (ExceptionDemo demo = new ExceptionDemo()) {
+            System.out.println("hello, try-with-resources!");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void close() throws Exception {
+        System.out.println(
+"""
+`try-with-resources` (Java 7+):
+一种语法糖，用于自动关闭实现了 `java.lang.AutoCloseable` 或 `java.io.Closeable` 接口的资源。
+""");
     }
 }

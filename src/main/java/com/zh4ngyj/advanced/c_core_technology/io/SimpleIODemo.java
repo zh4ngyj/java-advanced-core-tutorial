@@ -2,7 +2,7 @@ package com.zh4ngyj.advanced.c_core_technology.io;
 
 import java.io.*;
 
-public class IODemo {
+public class SimpleIODemo {
 
     public static void main(String[] args) throws Exception {
 
