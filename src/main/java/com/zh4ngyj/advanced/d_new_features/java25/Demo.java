@@ -20,7 +20,6 @@ public class Demo {
         var newMap = new HashMap<String,String>();
         newMap.put("java","var");
         System.out.println(newMap);
-        System.out.println("********************java 25********************");
     }
 
     public static void supportTextBlocks() {
@@ -32,7 +31,6 @@ public class Demo {
                 }
                 """;
         System.out.println(json);
-        System.out.println("********************java 25********************");
     }
 
     public static void supportSwitchArrowArrowExpression() {
@@ -43,7 +41,6 @@ public class Demo {
             default -> 0;
         };
         System.out.println(result);
-        System.out.println("********************java 25********************");
     }
 
     public static void supportFinalTypeRecord() {
@@ -74,7 +71,6 @@ public class Demo {
         System.out.println("Java 25 supportSealedClass:");
         System.out.println("non-sealed：解除密封限制，允许任意类继承；");
         System.out.println("sealed：继续限制继承（需再用 permits 指定子类）。");
-        System.out.println("********************java 25********************");
     }
 
     public static Object getObject() {
@@ -117,7 +113,6 @@ public class Demo {
             case null -> System.out.println("null");
             default -> System.out.println("default value" + obj);
         }
-        System.out.println("********************java 25********************");
     }
 
     static class FlexibleSupper extends Date {
@@ -215,10 +210,10 @@ for (long tid : threadIds) {
         System.out.println("通过 ExecutorService 创建（推荐）:");
         try (ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor()) {
             // 提交 100 万个虚拟线程任务（无压力）
-            for (int i = 0; i < 1_000_000; i++) {
+            for (int i = 0; i < 100_000; i++) {
                 int taskId = i;
                 executor.submit(() -> {
-                    System.out.println("taskId " + taskId + " running in: " + Thread.currentThread());
+//                    System.out.println("taskId " + taskId + " running in: " + Thread.currentThread());
                     // 即使阻塞(Thread.sleep)，底层系统线程也会被释放去干别的事
                     // 极其廉价，像 Go 语言的协程
                     Thread.sleep(100);
@@ -282,7 +277,7 @@ Java 25 引入了改进的 CDS (Class Data Sharing) 和 AOT Method Profiling，�
     }
 
     void main() {
-        String str = """
+        String summary = """
 一句话评价：Java 8 是经典的“蒸汽机”，稳定但笨重；Java 25 是现代化的“核聚变引擎”，轻量、高效且强大。
 
 综合建议:
@@ -292,5 +287,23 @@ Java 25 引入了改进的 CDS (Class Data Sharing) 和 AOT Method Profiling，�
 如果项目仍在活跃开发，建议跳过 11/17，直接升级到 21 或 25。Java 25 提供的迁移工具（如 jdeprscan）和兼容性模式已经非常成熟。
 注意：从 Java 8 升级最大的痛点在于 模块化系统 (Java 9) 的引入和 sun.misc.Unsafe 的封装。许多老旧依赖库需要更新版本。
                 """;
+        System.out.println(summary);
+
+        System.out.println("开始介绍");
+        Class<?> clazz = Demo.class;
+        Method[] methods = clazz.getDeclaredMethods();
+        Arrays.stream(methods)
+                .filter(method -> Modifier.isStatic(method.getModifiers()))
+                .filter(method -> method.getName().startsWith("support"))
+                .filter(method -> method.getParameterCount() == 0)
+                .forEach(method -> {
+                    try {
+                        System.out.println("********************java 25********************");
+                        method.setAccessible(true);
+                        method.invoke(null);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
     }
 }
